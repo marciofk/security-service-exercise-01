@@ -69,7 +69,7 @@ Follow the instructions from [Training Server](https://github.com/Backbase/train
 	    </beans:constructor-arg>
         
 	    <beans:property name="userDetailsContextMapper">
-	        <beans:bean class="com.backbase.training.security.ldap.UserDetailsContextMapperImpl">
+	        <beans:bean class="com.backbase.training.sec.UserDetailsContextMapperImpl">
 	            <beans:constructor-arg ref="userService"/>
 	            <beans:constructor-arg ref="groupService"/>
 	        </beans:bean>
