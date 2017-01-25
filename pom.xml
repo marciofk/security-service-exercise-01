@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.backbase.portal.foundation</groupId>
             <artifactId>business</artifactId>
-            <version>${portal.bom.version}</version>
+            <version>${portal.server.version}</version>
         </dependency>
     </dependencies>
 
