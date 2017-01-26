@@ -56,7 +56,7 @@ public class TrainingAuthenticationProvider implements AuthenticationProvider {
         String password = userToken.getCredentials().toString();
 
 
-        if (!"pablo".equals(userName)) {
+        if (!"shameer".equals(userName)) {
             throw new BadCredentialsException("Invalid username " + userName);
         }
 
