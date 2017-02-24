@@ -107,9 +107,10 @@ To enable this custom provider, you should define it as a bean in your *backbase
 <beans:bean id="trainingProvider" class="com.backbase.training.sec.TrainingAuthenticationProvider"/>
 
 Next, add the newly defined bean into the authentication chain present in the same configuration file. For example:
-	
+	```xml	
 <authentication-manager>
 	...
 	<authentication-provider ref="trainingProvider"/>
 	...
 </authentication-manager>
+	```
