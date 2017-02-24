@@ -6,6 +6,7 @@ import com.backbase.portal.foundation.commons.exceptions.*;
 import com.backbase.portal.foundation.domain.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,16 +15,21 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
- * Created by marcio on 05/07/16.
+ * A very simple example of AuthenticationProvider based on
+ * a fixed user name with any password with more than 10 characters
  */
 public class TrainingAuthenticationProvider implements AuthenticationProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserDetailsContextMapperImpl.class);
+    private static final String USER = "zankar";
+    private static final int MIN_LENGHT = 10;
 
+    @Autowired
     private UserBusinessService userBusinessService;
+
+    @Autowired
     private GroupBusinessService groupBusinessService;
 
     public GroupBusinessService getGroupBusinessService() {
@@ -51,32 +57,41 @@ public class TrainingAuthenticationProvider implements AuthenticationProvider {
                     "authentication.name = " + authentication.getName() +
                     "authentication.credentials = " + authentication.getCredentials() +
                     "authentication.details = " + authentication.getDetails());
-        UsernamePasswordAuthenticationToken userToken = (UsernamePasswordAuthenticationToken) authentication;
+
+        UsernamePasswordAuthenticationToken userToken =
+                (UsernamePasswordAuthenticationToken) authentication;
+
         String userName = userToken.getName();
         String password = userToken.getCredentials().toString();
 
 
-        if (!"shameer".equals(userName)) {
-            throw new BadCredentialsException("Invalid username " + userName);
+        if (!USER.equals(userName) || password.length() < MIN_LENGHT) {
+            throw new BadCredentialsException("Invalid username " + userName + " or password");
         }
 
         User user = updateUser(userName,password);
 
-        UsernamePasswordAuthenticationToken result = new UsernamePasswordAuthenticationToken(user, null,
-                user.getAuthorities());
+        UsernamePasswordAuthenticationToken result =
+                new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
         result.setDetails(userToken.getDetails());
 
         Collection<GrantedAuthority> auths = result.getAuthorities();
 
-        System.out.println("Authorities of " + userName);
+        LOG.debug("Authorities of " + userName);
         for(GrantedAuthority auth : auths) {
-            System.out.println("\tAuthority: " + auth.getAuthority());
+            LOG.debug("Authority: " + auth.getAuthority());
         }
 
         return result;
     }
 
+    /**
+     * Update the given user in CXP
+     * @param userName
+     * @param password
+     * @return a User reference
+     */
     private User updateUser(String userName, String password) {
         User user = null;
         try {
