@@ -104,17 +104,12 @@ This project comes with an example of Custom Authentication Provider: *com.backb
 
 To enable this custom provider, you should define it as a bean in your *backbase-portal-business-security.xml* file. For example:
 
-	```xml
-	<beans:bean id="trainingProvider" class="com.backbase.training.sec.TrainingAuthenticationProvider"/>
-	```
+<beans:bean id="trainingProvider" class="com.backbase.training.sec.TrainingAuthenticationProvider"/>
 
 Next, add the newly defined bean into the authentication chain present in the same configuration file. For example:
 	
-	```xml
-	<authentication-manager>
-	    ...
-	    <authentication-provider ref="trainingProvider"/>
-	    ...
-	</authentication-manager>
-	```
-
+<authentication-manager>
+	...
+	<authentication-provider ref="trainingProvider"/>
+	...
+</authentication-manager>
